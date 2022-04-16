@@ -27,7 +27,7 @@ public interface CentralEngine {
     /**
      * 最后处理
      */
-    FinalProcessor getFinalProcessor();
+    <T> FinalProcessor<T> getFinalProcessor();
 
     /**
      * 引擎启动
