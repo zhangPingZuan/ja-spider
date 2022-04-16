@@ -16,7 +16,7 @@ public abstract class FetchResponse {
     private Object originResponse;
 
     public String getOriginResponseString() {
-        return originResponse.toString();
+        throw new UnsupportedOperationException("not allow to do!!");
     }
 
 }
