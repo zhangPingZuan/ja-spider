@@ -7,13 +7,13 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @SuperBuilder
-public abstract class FetchResponse {
+public abstract class FetchResponse<T> {
 
     private boolean success;
 
     private int code;
 
-    private Object originResponse;
+    private T originResponse;
 
     public String getOriginResponseString() {
         throw new UnsupportedOperationException("not allow to do!!");

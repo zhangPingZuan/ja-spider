@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/spider_free_read?characterEncoding=utf8&useSSL=true
+    username: 'root'
+    password: 'zpz961216A'
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

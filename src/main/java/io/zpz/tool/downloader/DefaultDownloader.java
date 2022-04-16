@@ -10,7 +10,6 @@ import org.apache.commons.httpclient.HttpStatus;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Getter
@@ -18,7 +17,7 @@ public class DefaultDownloader implements Downloader {
 
     private final OkHttpClient okHttpClient = new OkHttpClient().newBuilder().build();
 
-    public FetchResponse fetch(FetchRequest fetchRequest) {
+    public FetchResponse<Response> fetch(FetchRequest fetchRequest) {
         Request.Builder builder = new Request.Builder();
         fetchRequest.getHeaders().forEach(builder::addHeader);
         builder.url(fetchRequest.getUrl());
@@ -35,7 +34,7 @@ public class DefaultDownloader implements Downloader {
         return HttpClientResponse.builder()
                 .code(HttpStatus.SC_BAD_REQUEST)
                 .success(Boolean.FALSE)
-                .originResponse(Optional.empty())
+                .originResponse(null)
                 .build();
     }
 
@@ -66,7 +65,7 @@ public class DefaultDownloader implements Downloader {
 //            e.printStackTrace();
 //        }
         request.headers().forEach(header -> headers.put(header.getFirst(), header.getSecond()));
-        FetchResponse response = new DefaultDownloader().fetch(HttpClientRequest.builder()
+        FetchResponse<Response> response = new DefaultDownloader().fetch(HttpClientRequest.builder()
                 .url("https://www.mianfeixiaoshuoyueduwang.com/")
                 .headers(headers)
                 .build());

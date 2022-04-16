@@ -1,8 +1,8 @@
 package io.zpz.tool.windup;
 
-public interface DatabaseFinalProcessor extends FinalProcessor {
+public interface DatabaseFinalProcessor {
 
-    void saveAll();
+    void saveAll(Iterable<?> records);
 
     boolean exist();
 
