@@ -1,4 +1,4 @@
-package io.zpz.tool.spider;
+package io.zpz.tool.crawling;
 
 public interface CrawlingRequest {
 
