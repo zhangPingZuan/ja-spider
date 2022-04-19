@@ -1,11 +1,13 @@
 package io.zpz.tool.spider;
 
 import io.zpz.tool.engine.CentralEngine;
+import io.zpz.tool.engine.EngineEvent;
+import io.zpz.tool.engine.EngineEventListener;
 
 /**
  * 这里描述蜘蛛的功能
  */
-public interface Spider {
+public interface Spider<E extends EngineEvent> extends EngineEventListener<E> {
 
     /**
      * 蜘蛛名称，进程中唯一

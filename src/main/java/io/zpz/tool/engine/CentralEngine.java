@@ -1,16 +1,13 @@
 package io.zpz.tool.engine;
 
+import io.zpz.tool.crawling.CrawlingRequest;
 import io.zpz.tool.downloader.Downloader;
 import io.zpz.tool.schedule.Scheduler;
-import io.zpz.tool.spider.Spider;
-import io.zpz.tool.windup.FinalProcessor;
-
-import java.util.Set;
 
 public interface CentralEngine {
 
     /**
-     * 获取调度器
+     * 获取调度器，调度器应该是自己的一个属性，我需要靠它进行调度。
      */
     Scheduler getScheduler();
 
@@ -20,17 +17,22 @@ public interface CentralEngine {
     Downloader getDownloader();
 
     /**
-     * 获取spider
+     * 参考spring中的多播器
      */
-    Set<Spider> getSpiders();
+    EngineEventMulticaster getEngineEventMulticaster();
 
     /**
-     * 最后处理
+     * 接收crawling request
      */
-    <T> FinalProcessor<T> getFinalProcessor();
+    void receiveCrawlingRequest(CrawlingRequest request);
 
     /**
      * 引擎启动
      */
     void start();
+
+    /**
+     * 引擎关闭
+     */
+    void stop();
 }
