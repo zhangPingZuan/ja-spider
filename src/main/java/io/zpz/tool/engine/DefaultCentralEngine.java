@@ -6,10 +6,10 @@ import io.zpz.tool.downloader.FetchRequest;
 import io.zpz.tool.downloader.FetchResponse;
 import io.zpz.tool.downloader.HttpClientRequest;
 import io.zpz.tool.schedule.Scheduler;
+import io.zpz.tool.util.UserAgentUtil;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,12 +33,6 @@ public class DefaultCentralEngine implements CentralEngine {
      */
     private final AtomicReference<Thread> curThread = new AtomicReference<>();
 
-    public static void main(String[] args) {
-        DefaultCentralEngine.builder()
-                .engineEventMulticaster(null)
-                .scheduler(null)
-                .build();
-    }
 
     @Override
     public EngineEventMulticaster getEngineEventMulticaster() {
@@ -79,12 +73,15 @@ public class DefaultCentralEngine implements CentralEngine {
         if (this.scheduler != null) {
             // 通过scheduler处理业务
         } else {
+
+            // 将crawling request转化成fetch request
             List<FetchRequest> fetchRequestList = this.crawlingRequests.stream()
                     .map(crawlingRequest -> HttpClientRequest.builder()
                             .url(crawlingRequest.getUrl())
-                            .headers(new HashMap<>())
+                            .headers(UserAgentUtil.getNormalAgent())
                             .build()).collect(Collectors.toList());
 
+            // 将拿到response
             List<FetchResponse<?>> fetchResponses = fetchRequestList.stream().map(this.downloader::fetch)
                     .collect(Collectors.toList());
 

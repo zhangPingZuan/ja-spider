@@ -1,12 +1,21 @@
 package io.zpz.tool;
 
+import io.zpz.tool.downloader.DefaultDownloader;
 import io.zpz.tool.engine.CentralEngine;
 import io.zpz.tool.engine.DefaultCentralEngine;
+import io.zpz.tool.engine.SimpleEngineEventMulticaster;
+import io.zpz.tool.spider.DownLoadedEngineEventSpider;
+import io.zpz.tool.spider.Spider;
+import io.zpz.tool.windup.FinalProcessor;
+import io.zpz.tool.windup.MysqlFinalProcessor;
+import io.zpz.tool.windup.entity.DataRecord;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.ArrayList;
 
 @Setter
 @Getter
@@ -16,29 +25,20 @@ public class MainSpider {
     public static void main(String[] args) {
 
         SpringApplication.run(MainSpider.class, args);
-//        MysqlFinalProcessor mysqlFinalProcessor = new MysqlFinalProcessor();
-//        mysqlFinalProcessor.process(Arrays.asList(DataRecord.builder()
-//                .url("asdsa")
-//                .content("{\"sdas\":\"sadsa\"}")
-//                .description("asdsa")
-//                .build()));
         CentralEngine centralEngine = DefaultCentralEngine.builder()
+                .downloader(new DefaultDownloader())
+                .engineEventMulticaster(new SimpleEngineEventMulticaster())
+                .scheduler(null)
                 .build();
+        // 注册 spider
+        Spider<?> spider = new DownLoadedEngineEventSpider();
+        centralEngine.getEngineEventMulticaster().addEngineEventListener(spider);
         centralEngine.start();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        log.info("哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
-        centralEngine.stop();
 
-        try {
-            Thread.sleep(10000);
-            log.info("main线程结束了");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        FinalProcessor<DataRecord> finalProcessor = new MysqlFinalProcessor();
+        finalProcessor.process(new ArrayList<>());
+
+        centralEngine.stop();
     }
 
 }
