@@ -1,18 +1,16 @@
 package io.zpz.tool.engine;
 
-import io.zpz.tool.crawling.CrawlingRequest;
 import io.zpz.tool.downloader.Downloader;
 import io.zpz.tool.downloader.FetchRequest;
 import io.zpz.tool.downloader.FetchResponse;
 import io.zpz.tool.downloader.HttpClientRequest;
 import io.zpz.tool.schedule.Scheduler;
+import io.zpz.tool.task.TaskManager;
 import io.zpz.tool.util.UserAgentUtil;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -24,15 +22,22 @@ public class DefaultCentralEngine implements CentralEngine {
 
     private final Scheduler scheduler;
 
-    private final EngineEventMulticaster engineEventMulticaster;
+    private final TaskManager taskManager;
 
-    private final Set<CrawlingRequest> crawlingRequests = new HashSet<>();
+    private final EngineEventMulticaster engineEventMulticaster;
 
     /**
      * 防止Builder进行改造
      */
     private final AtomicReference<Thread> curThread = new AtomicReference<>();
 
+    private final Integer DEFAULT_SIZE = 500;
+
+
+    @Override
+    public TaskManager getTaskManager() {
+        return this.taskManager;
+    }
 
     @Override
     public EngineEventMulticaster getEngineEventMulticaster() {
@@ -47,11 +52,6 @@ public class DefaultCentralEngine implements CentralEngine {
     @Override
     public Downloader getDownloader() {
         return this.downloader;
-    }
-
-    @Override
-    public void receiveCrawlingRequest(CrawlingRequest request) {
-        this.crawlingRequests.add(request);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class DefaultCentralEngine implements CentralEngine {
         } else {
 
             // 将crawling request转化成fetch request
-            List<FetchRequest> fetchRequestList = this.crawlingRequests.stream()
+            List<FetchRequest> fetchRequestList = this.taskManager.pollCrawlingRequests(DEFAULT_SIZE).stream()
                     .map(crawlingRequest -> HttpClientRequest.builder()
                             .url(crawlingRequest.getUrl())
                             .headers(UserAgentUtil.getNormalAgent())
@@ -86,7 +86,10 @@ public class DefaultCentralEngine implements CentralEngine {
                     .collect(Collectors.toList());
 
             // 用多播器广播一下
-            fetchResponses.forEach(fetchResponse -> this.engineEventMulticaster.multicast(new DownLoadedEngineEvent(fetchResponse.getOriginResponse())));
+            fetchResponses.forEach(fetchResponse -> {
+                DownLoadedEngineEvent downLoadedEngineEvent = new DownLoadedEngineEvent(fetchResponse);
+                this.engineEventMulticaster.multicast(downLoadedEngineEvent);
+            });
 
         }
     }

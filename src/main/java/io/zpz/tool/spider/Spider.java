@@ -1,6 +1,5 @@
 package io.zpz.tool.spider;
 
-import io.zpz.tool.engine.CentralEngine;
 import io.zpz.tool.engine.EngineEvent;
 import io.zpz.tool.engine.EngineEventListener;
 
@@ -22,20 +21,14 @@ public interface Spider<E extends EngineEvent> extends EngineEventListener<E> {
     void parse();
 
     /**
-     * 提交request到中央引擎
+     * xpath集合
      */
-    void commitUrlToEngine(CentralEngine centralEngine);
-
+    void addXpath(String url, String xpath);
 
     /**
      * xpath集合
      */
-    void addXpath(String xpath);
-
-    /**
-     * xpath集合
-     */
-    void addXpathCollection(Set<String> xpaths);
+    void addXpathCollection(String url, Set<String> xpaths);
 
 
 }

@@ -1,8 +1,9 @@
 package io.zpz.tool.engine;
 
-import io.zpz.tool.crawling.CrawlingRequest;
 import io.zpz.tool.downloader.Downloader;
 import io.zpz.tool.schedule.Scheduler;
+import io.zpz.tool.task.TaskManager;
+
 
 public interface CentralEngine {
 
@@ -22,12 +23,13 @@ public interface CentralEngine {
     EngineEventMulticaster getEngineEventMulticaster();
 
     /**
-     * 接收crawling request
+     * 任务管理器
      */
-    void receiveCrawlingRequest(CrawlingRequest request);
+    TaskManager getTaskManager();
 
     /**
      * 引擎启动
+     * 启动的时候，要去拉任务管理器
      */
     void start();
 

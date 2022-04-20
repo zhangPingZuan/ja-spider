@@ -15,6 +15,10 @@ public abstract class FetchResponse<T> {
 
     private T originResponse;
 
+    private String url;
+
+    private String spiderName;
+
     public String getOriginResponseString() {
         throw new UnsupportedOperationException("not allow to do!!");
     }

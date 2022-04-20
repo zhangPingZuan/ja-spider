@@ -27,6 +27,8 @@ public class DefaultDownloader implements Downloader {
                     .code(response.code())
                     .success(response.isSuccessful())
                     .originResponse(response)
+                    .url(fetchRequest.getUrl())
+                    .spiderName(fetchRequest.getSpiderName())
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -35,6 +37,8 @@ public class DefaultDownloader implements Downloader {
                 .code(HttpStatus.SC_BAD_REQUEST)
                 .success(Boolean.FALSE)
                 .originResponse(null)
+                .url(fetchRequest.getUrl())
+                .spiderName(fetchRequest.getSpiderName())
                 .build();
     }
 

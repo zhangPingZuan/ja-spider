@@ -16,4 +16,6 @@ public abstract class FetchRequest {
 
     private Map<String, String> headers;
 
+    private String spiderName;
+
 }

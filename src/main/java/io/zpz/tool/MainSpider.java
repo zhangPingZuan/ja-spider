@@ -6,6 +6,8 @@ import io.zpz.tool.engine.DefaultCentralEngine;
 import io.zpz.tool.engine.SimpleEngineEventMulticaster;
 import io.zpz.tool.spider.DownLoadedEngineEventSpider;
 import io.zpz.tool.spider.Spider;
+import io.zpz.tool.task.DefaultTaskManager;
+import io.zpz.tool.task.TaskManager;
 import io.zpz.tool.windup.FinalProcessor;
 import io.zpz.tool.windup.MysqlFinalProcessor;
 import io.zpz.tool.windup.entity.DataRecord;
@@ -25,9 +27,11 @@ public class MainSpider {
     public static void main(String[] args) {
 
         SpringApplication.run(MainSpider.class, args);
+        TaskManager taskManager = new DefaultTaskManager();
         CentralEngine centralEngine = DefaultCentralEngine.builder()
                 .downloader(new DefaultDownloader())
                 .engineEventMulticaster(new SimpleEngineEventMulticaster())
+                .taskManager(taskManager)
                 .scheduler(null)
                 .build();
         // 注册 spider

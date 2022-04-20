@@ -1,17 +1,17 @@
 package io.zpz.tool.spider;
 
-import io.zpz.tool.engine.CentralEngine;
 import io.zpz.tool.engine.EngineEvent;
 import io.zpz.tool.engine.core.ResolvableType;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class AbstractSpider<E extends EngineEvent> implements Spider<E> {
+public abstract class AbstractSpider<E extends EngineEvent> implements Spider<E> {
 
     protected final String name = UUID.randomUUID().toString();
-    protected final Set<String> xpathes = new HashSet<>();
+    protected final Map<String, Set<String>> xpathes = new HashMap<>();
 
     @Override
     public String getName() {
@@ -20,27 +20,22 @@ public class AbstractSpider<E extends EngineEvent> implements Spider<E> {
 
     @Override
     public void parse() {
-
+        throw new UnsupportedOperationException("请在子类中实现");
     }
 
     @Override
-    public void commitUrlToEngine(CentralEngine centralEngine) {
-
+    public void addXpath(String url, String xpath) {
+        throw new UnsupportedOperationException("请在子类中实现");
     }
 
     @Override
-    public void addXpath(String xpath) {
-
-    }
-
-    @Override
-    public void addXpathCollection(Set<String> xpaths) {
-
+    public void addXpathCollection(String url, Set<String> xpaths) {
+        throw new UnsupportedOperationException("请在子类中实现");
     }
 
     @Override
     public void onEngineEvent(E event) {
-
+        throw new UnsupportedOperationException("请在子类中实现");
     }
 
     @Override
