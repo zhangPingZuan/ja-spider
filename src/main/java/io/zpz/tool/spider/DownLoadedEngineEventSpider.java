@@ -5,6 +5,8 @@ import io.zpz.tool.engine.DownLoadedEngineEvent;
 import io.zpz.tool.engine.core.ResolvableType;
 import io.zpz.tool.task.TaskManager;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -50,20 +52,14 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
 
     @Override
     public void parse() {
-//        super.xpathes.forEach(xpath -> {
-//            // 进行过滤
-//
-//            // 得出CrawlingRequest
-//            taskManager.addCrawlingRequest(null);
-//
-//            // 得出processor request
-//        });
+        // do nothing
     }
 
     private void handleService(String url, String content) {
         super.xpathes.get(url).forEach(xpath -> {
 
             // 使用jsoup进行解析。
+            Document document = Jsoup.parse(content);
 
 
         });
