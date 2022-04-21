@@ -56,13 +56,11 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
     }
 
     private void handleService(String url, String content) {
-        super.xpathes.get(url).forEach(xpath -> {
 
-            // 使用jsoup进行解析。
-            Document document = Jsoup.parse(content);
+        // 使用jsoup进行解析。
+        Document document = Jsoup.parse(content);
 
 
-        });
     }
 
     @Override
