@@ -1,14 +1,15 @@
 package io.zpz.tool.spider;
 
+import io.zpz.tool.crawling.CrawlingResponse;
 import io.zpz.tool.engine.EngineEvent;
 import io.zpz.tool.engine.EngineEventListener;
-
-import java.util.Set;
+import io.zpz.tool.task.TaskManager;
+import io.zpz.tool.windup.FinalProcessor;
 
 /**
  * 这里描述蜘蛛的功能
  */
-public interface Spider<E extends EngineEvent> extends EngineEventListener<E> {
+public interface Spider<E extends EngineEvent, T> extends EngineEventListener<E> {
 
     /**
      * 蜘蛛名称，进程中唯一
@@ -18,17 +19,21 @@ public interface Spider<E extends EngineEvent> extends EngineEventListener<E> {
     /**
      * 解析应答
      */
-    void parse();
+    void parse(CrawlingResponse<?> crawlingResponse);
 
     /**
-     * xpath集合
+     * 添加taskManager
      */
-    void addXpath(String url, String xpath);
+    TaskManager getTaskManager();
 
     /**
-     * xpath集合
+     * 添加FinalProcessor
      */
-    void addXpathCollection(String url, Set<String> xpaths);
+    FinalProcessor<T> getFinalProcessor();
 
+    /**
+     * 添加spider iter
+     */
+    void addSpiderItem(SpiderItem<?> spiderItem);
 
 }

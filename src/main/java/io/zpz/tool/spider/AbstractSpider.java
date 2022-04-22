@@ -1,35 +1,43 @@
 package io.zpz.tool.spider;
 
+import io.zpz.tool.crawling.CrawlingResponse;
 import io.zpz.tool.engine.EngineEvent;
 import io.zpz.tool.engine.core.ResolvableType;
+import io.zpz.tool.task.TaskManager;
+import io.zpz.tool.windup.FinalProcessor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractSpider<E extends EngineEvent> implements Spider<E> {
+public abstract class AbstractSpider<E extends EngineEvent, T> implements Spider<E, T> {
 
     protected final String name = UUID.randomUUID().toString();
-    protected final Map<String, Set<String>> xpathes = new HashMap<>();
+    protected final Set<SpiderItem<?>> spiderItems = new HashSet<>();
 
     @Override
     public String getName() {
         return this.name;
     }
 
+
     @Override
-    public void parse() {
+    public void parse(CrawlingResponse<?> crawlingResponse) {
         throw new UnsupportedOperationException("请在子类中实现");
     }
 
     @Override
-    public void addXpath(String url, String xpath) {
+    public TaskManager getTaskManager() {
         throw new UnsupportedOperationException("请在子类中实现");
     }
 
     @Override
-    public void addXpathCollection(String url, Set<String> xpaths) {
+    public FinalProcessor<T> getFinalProcessor() {
+        throw new UnsupportedOperationException("请在子类中实现");
+    }
+
+    @Override
+    public void addSpiderItem(SpiderItem<?> spiderItem) {
         throw new UnsupportedOperationException("请在子类中实现");
     }
 

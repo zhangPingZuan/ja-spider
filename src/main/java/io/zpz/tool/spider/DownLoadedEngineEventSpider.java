@@ -1,49 +1,24 @@
 package io.zpz.tool.spider;
 
+import io.zpz.tool.crawling.CrawlingResponse;
 import io.zpz.tool.downloader.FetchResponse;
 import io.zpz.tool.engine.DownLoadedEngineEvent;
 import io.zpz.tool.engine.core.ResolvableType;
 import io.zpz.tool.task.TaskManager;
+import io.zpz.tool.windup.FinalProcessor;
+import io.zpz.tool.windup.entity.DataRecord;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 @Slf4j
-public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngineEvent> {
+@Builder
+public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngineEvent, DataRecord> {
 
-    private TaskManager taskManager;
-
-    @Override
-    public void addXpath(String url, String xpath) {
-        if (super.xpathes.containsKey(url)) {
-            if (super.xpathes.get(url) != null) {
-                super.xpathes.get(url).add(xpath);
-            } else {
-                super.xpathes.put(url, new HashSet<>(Collections.singletonList(xpath)));
-            }
-        } else {
-            super.xpathes.put(url, new HashSet<>(Collections.singletonList(xpath)));
-        }
-    }
-
-    @Override
-    public void addXpathCollection(String url, Set<String> xpaths) {
-        if (super.xpathes.containsKey(url)) {
-            if (super.xpathes.get(url) != null) {
-                super.xpathes.get(url).addAll(xpaths);
-            } else {
-                super.xpathes.put(url, xpaths);
-            }
-        } else {
-            super.xpathes.put(url, xpaths);
-        }
-    }
+    private final TaskManager taskManager;
+    private final FinalProcessor<DataRecord> finalProcessor;
 
     @Override
     public String getName() {
@@ -51,15 +26,29 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
     }
 
     @Override
-    public void parse() {
-        // do nothing
+    public void parse(CrawlingResponse<?> crawlingResponse) {
+        // doNothing
+        if (!crawlingResponse.getSpiderName().equals(super.name)) return;
+        this.spiderItems.stream().filter(spiderItem -> spiderItem.match(crawlingResponse.getUrl()))
+                .forEach(spiderItem -> {
+                    // handle
+                    handleService(spiderItem, crawlingResponse.getOriginResponseString());
+                });
     }
 
-    private void handleService(String url, String content) {
+    @Override
+    public TaskManager getTaskManager() {
+        return super.getTaskManager();
+    }
 
-        // 使用jsoup进行解析。
-        Document document = Jsoup.parse(content);
 
+    @Override
+    public void addSpiderItem(SpiderItem<?> spiderItem) {
+        super.addSpiderItem(spiderItem);
+    }
+
+    private void handleService(SpiderItem<?> spiderItem, String content) {
+        Iterable<?> dataRecords = spiderItem.getResults(content);
 
     }
 
@@ -73,10 +62,6 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
         if (event.getSource() instanceof FetchResponse<?>) {
             FetchResponse<?> fetchResponse = (FetchResponse<?>) event.getSource();
 
-            // 发现不是这个蜘蛛处理的就直接返回
-            if (!fetchResponse.getSpiderName().equals(this.name)) return;
-
-            handleService(fetchResponse.getUrl(), fetchResponse.getOriginResponseString());
         } else throw new RuntimeException("不支持的事件源");
     }
 

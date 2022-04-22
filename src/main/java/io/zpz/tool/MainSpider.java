@@ -35,7 +35,7 @@ public class MainSpider {
                 .scheduler(null)
                 .build();
         // 注册 spider
-        Spider<?> spider = new DownLoadedEngineEventSpider();
+        Spider<?> spider = DownLoadedEngineEventSpider.builder().build();
         centralEngine.getEngineEventMulticaster().addEngineEventListener(spider);
         centralEngine.start();
 

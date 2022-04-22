@@ -4,4 +4,10 @@ public interface CrawlingResponse<T> {
 
     T getOriginResponse();
 
+    String getOriginResponseString();
+
+    String getUrl();
+
+    String getSpiderName();
+
 }
