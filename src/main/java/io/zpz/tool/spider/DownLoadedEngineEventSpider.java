@@ -42,7 +42,7 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
 
     @Override
     public void addSpiderItem(SpiderItem<?> spiderItem) {
-        super.addSpiderItem(spiderItem);
+        super.spiderItems.add(spiderItem);
     }
 
     private void handleService(SpiderItem<?> spiderItem, String content) {
