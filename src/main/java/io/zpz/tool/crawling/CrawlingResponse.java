@@ -8,6 +8,6 @@ public interface CrawlingResponse<T> {
 
     String getUrl();
 
-    String getSpiderName();
+    String getSpiderKey();
 
 }

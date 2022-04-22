@@ -26,7 +26,7 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
     @Override
     public void parse(CrawlingResponse<?> crawlingResponse) {
         // doNothing
-        if (!crawlingResponse.getSpiderName().equals(super.name)) return;
+        if (!crawlingResponse.getSpiderKey().equals(super.name)) return;
         this.spiderItems.stream().filter(spiderItem -> spiderItem.match(crawlingResponse.getUrl()))
                 .forEach(spiderItem -> {
                     // handle
