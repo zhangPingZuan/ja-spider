@@ -1,7 +1,7 @@
 package io.zpz.tool.windup;
 
-public interface FinalProcessor<T> {
+public interface FinalProcessor {
 
-    void process(Iterable<T> records);
+    <T> void process(Iterable<T> records);
 
 }

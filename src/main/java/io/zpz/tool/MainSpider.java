@@ -10,7 +10,6 @@ import io.zpz.tool.task.DefaultTaskManager;
 import io.zpz.tool.task.TaskManager;
 import io.zpz.tool.windup.FinalProcessor;
 import io.zpz.tool.windup.MysqlFinalProcessor;
-import io.zpz.tool.windup.entity.DataRecord;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +38,7 @@ public class MainSpider {
         centralEngine.getEngineEventMulticaster().addEngineEventListener(spider);
         centralEngine.start();
 
-        FinalProcessor<DataRecord> finalProcessor = new MysqlFinalProcessor();
+        FinalProcessor finalProcessor = new MysqlFinalProcessor();
         finalProcessor.process(new ArrayList<>());
 
         centralEngine.stop();

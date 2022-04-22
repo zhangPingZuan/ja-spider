@@ -85,6 +85,7 @@ public class DefaultCentralEngine implements CentralEngine {
             List<FetchResponse<?>> fetchResponses = fetchRequestList.stream().map(this.downloader::fetch)
                     .collect(Collectors.toList());
 
+
             // 用多播器广播一下
             fetchResponses.forEach(fetchResponse -> {
                 DownLoadedEngineEvent downLoadedEngineEvent = new DownLoadedEngineEvent(fetchResponse);

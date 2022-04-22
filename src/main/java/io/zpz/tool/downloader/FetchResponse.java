@@ -1,5 +1,6 @@
 package io.zpz.tool.downloader;
 
+import io.zpz.tool.crawling.CrawlingResponse;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -7,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @Getter
 @SuperBuilder
-public abstract class FetchResponse<T> {
+public abstract class FetchResponse<T> implements CrawlingResponse<T> {
 
     private boolean success;
 

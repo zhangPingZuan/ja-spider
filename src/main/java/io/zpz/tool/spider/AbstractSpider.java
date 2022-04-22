@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractSpider<E extends EngineEvent, T> implements Spider<E, T> {
+public abstract class AbstractSpider<E extends EngineEvent> implements Spider<E> {
 
     protected final String name = UUID.randomUUID().toString();
     protected final Set<SpiderItem<?>> spiderItems = new HashSet<>();
@@ -32,7 +32,7 @@ public abstract class AbstractSpider<E extends EngineEvent, T> implements Spider
     }
 
     @Override
-    public FinalProcessor<T> getFinalProcessor() {
+    public FinalProcessor getFinalProcessor() {
         throw new UnsupportedOperationException("请在子类中实现");
     }
 

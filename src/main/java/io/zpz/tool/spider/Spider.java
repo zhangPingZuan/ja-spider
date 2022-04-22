@@ -9,7 +9,7 @@ import io.zpz.tool.windup.FinalProcessor;
 /**
  * 这里描述蜘蛛的功能
  */
-public interface Spider<E extends EngineEvent, T> extends EngineEventListener<E> {
+public interface Spider<E extends EngineEvent> extends EngineEventListener<E> {
 
     /**
      * 蜘蛛名称，进程中唯一
@@ -29,7 +29,7 @@ public interface Spider<E extends EngineEvent, T> extends EngineEventListener<E>
     /**
      * 添加FinalProcessor
      */
-    FinalProcessor<T> getFinalProcessor();
+    FinalProcessor getFinalProcessor();
 
     /**
      * 添加spider iter

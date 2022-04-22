@@ -1,12 +1,10 @@
 package io.zpz.tool.spider;
 
 import io.zpz.tool.crawling.CrawlingResponse;
-import io.zpz.tool.downloader.FetchResponse;
 import io.zpz.tool.engine.DownLoadedEngineEvent;
 import io.zpz.tool.engine.core.ResolvableType;
 import io.zpz.tool.task.TaskManager;
 import io.zpz.tool.windup.FinalProcessor;
-import io.zpz.tool.windup.entity.DataRecord;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,10 +13,10 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Builder
-public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngineEvent, DataRecord> {
+public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngineEvent> {
 
     private final TaskManager taskManager;
-    private final FinalProcessor<DataRecord> finalProcessor;
+    private final FinalProcessor finalProcessor;
 
     @Override
     public String getName() {
@@ -48,21 +46,16 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
     }
 
     private void handleService(SpiderItem<?> spiderItem, String content) {
+
         Iterable<?> dataRecords = spiderItem.getResults(content);
+        finalProcessor.process(dataRecords);
 
     }
 
     @Override
     public void onEngineEvent(DownLoadedEngineEvent event) {
         log.info("#### 接收到广播事件 ####");
-
-        // 解析后，，发现还有url，，继续提交到 centralEngine
-        // 真的要继续提交吗？？？那是不是应该是外面控制层的事情了？？？
-        // 这边只要把结果保存下
-        if (event.getSource() instanceof FetchResponse<?>) {
-            FetchResponse<?> fetchResponse = (FetchResponse<?>) event.getSource();
-
-        } else throw new RuntimeException("不支持的事件源");
+        this.parse((CrawlingResponse<?>) event.getSource());
     }
 
     @Override
@@ -73,7 +66,7 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
     @Override
     public boolean supportsSourceType(Class<?> sourceType) {
         System.out.println("##### 类名:" + sourceType + "#####");
-        return Stream.of(FetchResponse.class).anyMatch(clz -> clz.isAssignableFrom(sourceType));
+        return Stream.of(CrawlingResponse.class).anyMatch(clz -> clz.isAssignableFrom(sourceType));
     }
 
 

@@ -2,10 +2,10 @@ package io.zpz.tool.windup.repository;
 
 import io.zpz.tool.windup.FinalProcessor;
 
-public class FileFinalProcessor implements FinalProcessor<String> {
+public class FileFinalProcessor implements FinalProcessor {
 
     @Override
-    public void process(Iterable<String> records) {
+    public <T> void process(Iterable<T> records) {
 
     }
 }
