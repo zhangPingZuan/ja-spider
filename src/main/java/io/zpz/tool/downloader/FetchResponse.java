@@ -18,7 +18,7 @@ public abstract class FetchResponse<T> implements CrawlingResponse<T> {
 
     private String url;
 
-    private String spiderName;
+    private String spiderKey;
 
     public String getOriginResponseString() {
         throw new UnsupportedOperationException("not allow to do!!");

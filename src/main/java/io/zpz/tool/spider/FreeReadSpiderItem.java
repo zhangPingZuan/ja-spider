@@ -14,7 +14,7 @@ public class FreeReadSpiderItem extends AbstractSpiderItem<DataRecord> {
 
     @Override
     public Iterable<DataRecord> getResults(String content) {
-
+        log.info("###### FreeReadSpiderItem:{}", content);
         return new ArrayList<>();
     }
 

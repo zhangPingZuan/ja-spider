@@ -24,10 +24,10 @@ public class MysqlFinalProcessor implements FinalProcessor {
         dataRecordRepository.saveAll(dataRecords);
     }
 
-    public static void main(String[] args) {
-        MysqlFinalProcessor dataRecordMysqlFinalProcessor = new MysqlFinalProcessor();
-        List<DataRecord> dataRecordList = new ArrayList<>();
-        dataRecordMysqlFinalProcessor.process(dataRecordList);
-    }
+//    public static void main(String[] args) {
+//        MysqlFinalProcessor dataRecordMysqlFinalProcessor = new MysqlFinalProcessor();
+//        List<DataRecord> dataRecordList = new ArrayList<>();
+//        dataRecordMysqlFinalProcessor.process(dataRecordList);
+//    }
 
 }

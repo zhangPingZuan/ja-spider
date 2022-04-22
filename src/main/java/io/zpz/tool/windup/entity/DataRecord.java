@@ -2,10 +2,7 @@ package io.zpz.tool.windup.entity;
 
 
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -20,6 +17,7 @@ import javax.persistence.Id;
 @Entity
 @TypeDef(name = "json", typeClass = JsonStringType.class)
 @NoArgsConstructor
+@AllArgsConstructor
 public class DataRecord {
 
     @Id

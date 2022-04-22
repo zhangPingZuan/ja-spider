@@ -11,6 +11,11 @@ import java.util.Optional;
 public class HttpClientResponse extends FetchResponse<Response> {
 
     @Override
+    public String getSpiderKey() {
+        return null;
+    }
+
+    @Override
     public String getOriginResponseString() {
         return this.getOriginResponse() == null ? "" : Optional.ofNullable(this.getOriginResponse().body())
                 .map(responseBody -> {
