@@ -14,7 +14,7 @@ public interface Spider<E extends EngineEvent> extends EngineEventListener<E> {
     /**
      * 蜘蛛名称，进程中唯一
      */
-    String getName();
+    String getSpiderKey();
 
     /**
      * 解析应答

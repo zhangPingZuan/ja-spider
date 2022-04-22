@@ -19,14 +19,14 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
     private final FinalProcessor finalProcessor;
 
     @Override
-    public String getName() {
+    public String getSpiderKey() {
         return UUID.randomUUID().toString();
     }
 
     @Override
     public void parse(CrawlingResponse<?> crawlingResponse) {
         // doNothing
-        if (!crawlingResponse.getSpiderKey().equals(super.name)) return;
+        if (!crawlingResponse.getSpiderKey().equals(super.spiderKey)) return;
         this.spiderItems.stream().filter(spiderItem -> spiderItem.match(crawlingResponse.getUrl()))
                 .forEach(spiderItem -> {
                     // handle
@@ -54,7 +54,7 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
 
     @Override
     public void onEngineEvent(DownLoadedEngineEvent event) {
-        log.info("#### 接收到广播事件 ####");
+        log.info("#### spider:{} 接收到广播事件 ####", super.getSpiderKey());
         this.parse((CrawlingResponse<?>) event.getSource());
     }
 

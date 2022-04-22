@@ -12,12 +12,12 @@ import java.util.UUID;
 
 public abstract class AbstractSpider<E extends EngineEvent> implements Spider<E> {
 
-    protected final String name = UUID.randomUUID().toString();
+    protected final String spiderKey = UUID.randomUUID().toString();
     protected final Set<SpiderItem<?>> spiderItems = new HashSet<>();
 
     @Override
-    public String getName() {
-        return this.name;
+    public String getSpiderKey() {
+        return this.spiderKey;
     }
 
 
