@@ -21,13 +21,10 @@ public class MysqlFinalProcessor implements FinalProcessor {
                 dataRecords.add((DataRecord) record);
             // 如果是其他类。
         });
-        dataRecordRepository.saveAll(dataRecords);
+        if (dataRecords.size() != 0) {
+            dataRecordRepository.saveAll(dataRecords);
+        }
     }
 
-//    public static void main(String[] args) {
-//        MysqlFinalProcessor dataRecordMysqlFinalProcessor = new MysqlFinalProcessor();
-//        List<DataRecord> dataRecordList = new ArrayList<>();
-//        dataRecordMysqlFinalProcessor.process(dataRecordList);
-//    }
 
 }
