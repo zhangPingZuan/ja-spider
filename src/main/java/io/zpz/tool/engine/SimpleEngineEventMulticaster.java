@@ -28,6 +28,7 @@ public class SimpleEngineEventMulticaster implements EngineEventMulticaster {
     @Override
     public void multicast(EngineEvent engineEvent) {
 
+        log.info("listeners数量:{}", listeners.size());
         if (listeners.size() == 0) {
             return;
         }

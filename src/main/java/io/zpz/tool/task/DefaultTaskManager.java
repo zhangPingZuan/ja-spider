@@ -24,14 +24,14 @@ public class DefaultTaskManager extends AbstractTaskManager {
 
     @Override
     public CrawlingRequest pollCrawlingRequest() {
-        return super.crawlingRequests.peek();
+        return super.crawlingRequests.poll();
     }
 
     @Override
     public List<CrawlingRequest> pollCrawlingRequests(Integer size) {
         return IntStream
                 .range(0, super.crawlingRequests.size() > size ? size : super.crawlingRequests.size())
-                .mapToObj(i -> super.crawlingRequests.peek())
+                .mapToObj(i -> super.crawlingRequests.poll())
                 .collect(toList());
     }
 

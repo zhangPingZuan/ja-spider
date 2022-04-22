@@ -9,6 +9,7 @@ import io.zpz.tool.task.TaskManager;
 import io.zpz.tool.util.UserAgentUtil;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -80,6 +81,16 @@ public class DefaultCentralEngine implements CentralEngine {
                             .url(crawlingRequest.getUrl())
                             .headers(UserAgentUtil.getNormalAgent())
                             .build()).collect(Collectors.toList());
+
+            if (CollectionUtils.isEmpty(fetchRequestList)) {
+                // 休息一下
+                try {
+                    log.info("fetchRequestList是空的，我先睡一下1s！！！");
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
             // 将拿到response
             List<FetchResponse<?>> fetchResponses = fetchRequestList.stream().map(this.downloader::fetch)

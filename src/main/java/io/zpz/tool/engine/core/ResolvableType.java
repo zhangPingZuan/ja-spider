@@ -41,7 +41,7 @@ public class ResolvableType {
     }
 
     public boolean isAssignableFrom(ResolvableType resolvableType) {
-        return this.type.getClass().isAssignableFrom(resolvableType.getClass());
+        return this.type.getClass().isAssignableFrom(resolvableType.type.getClass());
     }
 
 //    public static void main(String[] args) {

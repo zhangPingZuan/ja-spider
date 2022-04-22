@@ -1,5 +1,6 @@
 package io.zpz.tool;
 
+import io.zpz.tool.crawling.CrawlingRequest;
 import io.zpz.tool.downloader.DefaultDownloader;
 import io.zpz.tool.engine.CentralEngine;
 import io.zpz.tool.engine.DefaultCentralEngine;
@@ -45,13 +46,25 @@ public class MainSpider {
                 .regex("https://www.shuquge.com/")
                 .build());
 
+        taskManager.addCrawlingRequest(new CrawlingRequest() {
+            @Override
+            public String getUrl() {
+                return "https://www.shuquge.com/";
+            }
+
+            @Override
+            public String getSpiderKey() {
+                return spider.getSpiderKey();
+            }
+        });
+
         // 注册spider
         centralEngine.getEngineEventMulticaster().addEngineEventListener(spider);
 
         // 启动引擎
         centralEngine.start();
         try {
-            Thread.sleep(10000);
+            Thread.sleep(100000000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
