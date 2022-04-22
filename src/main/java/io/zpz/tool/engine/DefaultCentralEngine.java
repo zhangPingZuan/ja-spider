@@ -79,6 +79,7 @@ public class DefaultCentralEngine implements CentralEngine {
             List<FetchRequest> fetchRequestList = this.taskManager.pollCrawlingRequests(DEFAULT_SIZE).stream()
                     .map(crawlingRequest -> HttpClientRequest.builder()
                             .url(crawlingRequest.getUrl())
+                            .spiderKey(crawlingRequest.getSpiderKey())
                             .headers(UserAgentUtil.getNormalAgent())
                             .build()).collect(Collectors.toList());
 

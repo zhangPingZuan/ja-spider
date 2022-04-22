@@ -27,6 +27,8 @@ public class MainSpider {
 
         SpringApplication.run(MainSpider.class, args);
 
+        String url = "https://www.shuquge.com/";
+
         // 配置引擎
         TaskManager taskManager = new DefaultTaskManager();
         CentralEngine centralEngine = DefaultCentralEngine.builder()
@@ -43,13 +45,13 @@ public class MainSpider {
                 .finalProcessor(finalProcessor)
                 .build();
         spider.addSpiderItem(FreeReadSpiderItem.builder()
-                .regex("https://www.shuquge.com/")
+                .regex(url)
                 .build());
 
         taskManager.addCrawlingRequest(new CrawlingRequest() {
             @Override
             public String getUrl() {
-                return "https://www.shuquge.com/";
+                return url;
             }
 
             @Override

@@ -8,7 +8,6 @@ import io.zpz.tool.windup.FinalProcessor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -20,7 +19,7 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
 
     @Override
     public String getSpiderKey() {
-        return UUID.randomUUID().toString();
+        return super.spiderKey;
     }
 
     @Override

@@ -26,7 +26,7 @@ public class DefaultDownloader implements Downloader {
                     .success(response.isSuccessful())
                     .originResponse(response)
                     .url(fetchRequest.getUrl())
-                    .spiderKey(fetchRequest.getSpiderName())
+                    .spiderKey(fetchRequest.getSpiderKey())
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,7 +36,7 @@ public class DefaultDownloader implements Downloader {
                 .success(Boolean.FALSE)
                 .originResponse(null)
                 .url(fetchRequest.getUrl())
-                .spiderKey(fetchRequest.getSpiderName())
+                .spiderKey(fetchRequest.getSpiderKey())
                 .build();
     }
 

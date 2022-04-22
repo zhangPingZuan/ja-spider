@@ -12,7 +12,7 @@ public class HttpClientResponse extends FetchResponse<Response> {
 
     @Override
     public String getSpiderKey() {
-        return this.getSpiderKey();
+        return super.getSpiderKey();
     }
 
     @Override
