@@ -38,6 +38,7 @@ public class FreeReadSpiderItem extends AbstractSpiderItem<DataRecord> {
 
                 if ("首页".equals(link.text())) {
 
+
                 } else {
                     // 添加数据记录
                     DataRecord dataRecord = new DataRecord();

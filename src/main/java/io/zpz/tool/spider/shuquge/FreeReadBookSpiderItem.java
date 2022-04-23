@@ -27,10 +27,10 @@ public class FreeReadBookSpiderItem extends AbstractSpiderItem<DataRecord> {
 
     @Override
     public boolean match(String url) {
-        if (Pattern.matches("https://www.shuquge.com/txt/\\w+.html", url)) {
+        if (Pattern.matches("https://www.shuquge.com/txt/\\w+/index.html", url)) {
             log.info("#### 这是小说的书籍页面:{}，会解析出章节数据。", url);
         }
-        return Pattern.matches("https://www.shuquge.com/txt/\\w+.html", url);
+        return Pattern.matches("https://www.shuquge.com/txt/\\w+/index.html", url);
     }
 
     @Override

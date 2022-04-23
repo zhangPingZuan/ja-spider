@@ -50,7 +50,7 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
                 map.put("author", book.select("span.s4").text());
                 map.put("bookUrl", url);
                 dataRecord.setContent(map);
-                dataRecord.setDescription("这是一个书籍页面（分类页面解析出来的一个数据）");
+                dataRecord.setDescription("分类页面解析出来的一个书籍数据");
                 dataRecordList.add(dataRecord);
 
                 //添加新请求
@@ -62,9 +62,10 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
         for (Element page : pages) {
             if (page.text().equals("下一页")) {
                 DataRecord dataRecord = new DataRecord();
-                dataRecord.setUrl("https://www.shuquge.com" + page.attr("href"));
+                dataRecord.setUrl(originUrl);
                 Map<String, Object> map = new HashMap<>();
                 map.put("category", category);
+                map.put("categoryUrl", "https://www.shuquge.com" + page.attr("href"));
                 dataRecord.setContent(map);
                 dataRecord.setDescription("这是一个分类页面");
                 dataRecordList.add(dataRecord);
