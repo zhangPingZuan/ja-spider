@@ -94,7 +94,7 @@ public class DefaultCentralEngine implements CentralEngine {
             }
 
             // todo delete 避免把人家网站搞崩溃
-            delay500ms();
+//            delay500ms();
 
             // 将拿到response
             List<FetchResponse<?>> fetchResponses = fetchRequestList.stream().map(this.downloader::fetch)
