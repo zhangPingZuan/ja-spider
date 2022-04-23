@@ -37,7 +37,7 @@ public class DataRecord {
 
 
     @Type(type = "json")
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "content")
     private Map<String, Object> content;
 
 
