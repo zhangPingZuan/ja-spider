@@ -67,11 +67,12 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
         Elements pages = document.select("body > div.wrap > div.up > div.l.bd > ul > div > a");
         for (Element page : pages) {
             if (page.text().equals("下一页")) {
+                String categoryUrl = "https://www.shuquge.com" + page.attr("href");
                 DataRecord dataRecord = new DataRecord();
                 dataRecord.setUrl(originUrl);
                 Map<String, Object> map = new HashMap<>();
                 map.put("category", category);
-                map.put("categoryUrl", "https://www.shuquge.com" + page.attr("href"));
+                map.put("categoryUrl", categoryUrl);
                 try {
                     dataRecord.setContent(new ObjectMapper().writeValueAsString(map));
                 } catch (JsonProcessingException e) {
@@ -79,7 +80,7 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
                 }
                 dataRecord.setDescription("这是一个分类页面");
                 dataRecordList.add(dataRecord);
-                urls.add(dataRecord.getUrl());
+                urls.add(categoryUrl);
             }
         }
 
