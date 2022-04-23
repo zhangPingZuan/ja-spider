@@ -1,5 +1,7 @@
 package io.zpz.tool.spider.shuquge;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zpz.tool.spider.AbstractSpiderItem;
 import io.zpz.tool.spider.SpiderItemResult;
 import io.zpz.tool.windup.entity.DataRecord;
@@ -45,11 +47,15 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
                 // 添加数据记录
                 DataRecord dataRecord = new DataRecord();
                 dataRecord.setUrl(originUrl);
-                Map<String, String> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<>();
                 map.put("book", book.select("span.s2 > a").text());
                 map.put("author", book.select("span.s4").text());
                 map.put("bookUrl", url);
-                dataRecord.setContent(map);
+                try {
+                    dataRecord.setContent(new ObjectMapper().writeValueAsString(map));
+                } catch (JsonProcessingException e) {
+                    dataRecord.setContent("序列化异常");
+                }
                 dataRecord.setDescription("分类页面解析出来的一个书籍数据");
                 dataRecordList.add(dataRecord);
 
@@ -63,10 +69,14 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
             if (page.text().equals("下一页")) {
                 DataRecord dataRecord = new DataRecord();
                 dataRecord.setUrl(originUrl);
-                Map<String, String> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<>();
                 map.put("category", category);
                 map.put("categoryUrl", "https://www.shuquge.com" + page.attr("href"));
-                dataRecord.setContent(map);
+                try {
+                    dataRecord.setContent(new ObjectMapper().writeValueAsString(map));
+                } catch (JsonProcessingException e) {
+                    dataRecord.setContent("序列化异常");
+                }
                 dataRecord.setDescription("这是一个分类页面");
                 dataRecordList.add(dataRecord);
                 urls.add(dataRecord.getUrl());

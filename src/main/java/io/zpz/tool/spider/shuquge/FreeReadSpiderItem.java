@@ -1,6 +1,8 @@
 package io.zpz.tool.spider.shuquge;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zpz.tool.spider.AbstractSpiderItem;
 import io.zpz.tool.spider.SpiderItemResult;
 import io.zpz.tool.windup.entity.DataRecord;
@@ -43,10 +45,15 @@ public class FreeReadSpiderItem extends AbstractSpiderItem<DataRecord> {
                     // 添加数据记录
                     DataRecord dataRecord = new DataRecord();
                     dataRecord.setUrl(originUrl);
-                    Map<String, String> map = new HashMap<>();
+                    Map<String, Object> map = new HashMap<>();
                     map.put("category", link.text());
                     map.put("categoryUrl", url);
-                    dataRecord.setContent(map);
+                    try {
+                        dataRecord.setContent(new ObjectMapper().writeValueAsString(map));
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                        dataRecord.setContent("");
+                    }
                     dataRecord.setDescription("这是一个分类页面");
                     dataRecordList.add(dataRecord);
                 }

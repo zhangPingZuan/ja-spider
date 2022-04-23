@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Map;
 
 @Builder
 @Setter
@@ -38,7 +37,7 @@ public class DataRecord {
 
     @Type(type = "json")
     @Column(columnDefinition = "content")
-    private Map<String, String> content;
+    private String content;
 
 
 }

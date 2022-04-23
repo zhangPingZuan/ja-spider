@@ -74,20 +74,19 @@ public class FreeReadBookSpiderItem extends AbstractSpiderItem<DataRecord> {
             chapterInfos.add(character);
         }
         DataRecord dataRecord = new DataRecord();
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
+        map.put("bookInfo", bookInfo);
+        map.put("chapterInfos", chapterInfos.stream()
+                .sorted(Comparator.comparing(Character::getIndex))
+                .collect(toList()));
+        dataRecord.setUrl(originUrl);
         try {
-            map.put("bookInfo", mapper.writeValueAsString(bookInfo));
-            map.put("chapterInfos", mapper.writeValueAsString(chapterInfos.stream()
-                    .sorted(Comparator.comparing(Character::getIndex))
-                    .collect(toList())));
+            dataRecord.setContent(mapper.writeValueAsString(map));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            map.put("bookInfo", "序列化异常");
-            map.put("chapterInfos", "序列化异常");
+            dataRecord.setContent("序列化异常");
         }
-        dataRecord.setUrl(originUrl);
-        dataRecord.setContent(map);
         dataRecord.setDescription("这是一个书籍详情数据");
         dataRecordList.add(dataRecord);
         return new SpiderItemResult(dataRecordList, urls);
