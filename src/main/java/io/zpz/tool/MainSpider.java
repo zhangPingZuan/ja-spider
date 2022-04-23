@@ -7,6 +7,8 @@ import io.zpz.tool.engine.DefaultCentralEngine;
 import io.zpz.tool.engine.SimpleEngineEventMulticaster;
 import io.zpz.tool.spider.DownLoadedEngineEventSpider;
 import io.zpz.tool.spider.Spider;
+import io.zpz.tool.spider.shuquge.FreeReadBookSpiderItem;
+import io.zpz.tool.spider.shuquge.FreeReadCategorySpiderItem;
 import io.zpz.tool.spider.shuquge.FreeReadSpiderItem;
 import io.zpz.tool.task.DefaultTaskManager;
 import io.zpz.tool.task.TaskManager;
@@ -46,6 +48,12 @@ public class MainSpider {
                 .build();
         spider.addSpiderItem(FreeReadSpiderItem.builder()
                 .regex(url)
+                .build());
+        spider.addSpiderItem(FreeReadCategorySpiderItem.builder()
+                .regex("https://www.shuquge.com/category/\\w+.html")
+                .build());
+        spider.addSpiderItem(FreeReadBookSpiderItem.builder()
+                .regex("https://www.shuquge.com/txt/\\w+/index.html")
                 .build());
 
         taskManager.addCrawlingRequest(new CrawlingRequest() {

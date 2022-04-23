@@ -17,6 +17,6 @@ public abstract class AbstractSpiderItem<T> implements SpiderItem<T> {
 
     @Override
     public SpiderItemResult getResults(String content) {
-        throw new UnsupportedOperationException("请调用子类");
+        throw new UnsupportedOperationException("请实现子类的方法");
     }
 }

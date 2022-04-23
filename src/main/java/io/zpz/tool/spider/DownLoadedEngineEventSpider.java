@@ -80,7 +80,6 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
 
     @Override
     public boolean supportsSourceType(Class<?> sourceType) {
-        System.out.println("##### 类名:" + sourceType + "#####");
         return Stream.of(CrawlingResponse.class).anyMatch(clz -> clz.isAssignableFrom(sourceType));
     }
 

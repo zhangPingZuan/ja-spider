@@ -27,8 +27,6 @@ public class SimpleEngineEventMulticaster implements EngineEventMulticaster {
 
     @Override
     public void multicast(EngineEvent engineEvent) {
-
-        log.info("listeners数量:{}", listeners.size());
         if (listeners.size() == 0) {
             return;
         }
@@ -39,7 +37,6 @@ public class SimpleEngineEventMulticaster implements EngineEventMulticaster {
         // 精简版过滤
         getApplicationListeners(engineEvent, type)
                 .forEach(listener -> {
-                    log.info("##### 广播一下 #####");
                     // 最后才调用监听器
                     doInvokeListener(listener, engineEvent);
                 });
