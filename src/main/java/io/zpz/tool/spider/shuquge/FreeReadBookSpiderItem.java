@@ -67,7 +67,7 @@ public class FreeReadBookSpiderItem extends AbstractSpiderItem<DataRecord> {
         for (Element element : chapters) {
             String url = element.select("a").attr("href");
             Character character = new Character();
-            character.setUrl(StringUtils.remove(originUrl, ".html") + "/" + url);
+            character.setUrl(StringUtils.remove(originUrl, "index.html") + "/" + url);
             character.setChapterName(element.text());
             character.setIndex(chapters.indexOf(element));
             chapterInfos.remove(character);

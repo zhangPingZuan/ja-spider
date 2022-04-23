@@ -20,7 +20,9 @@ public class HttpClientResponse extends FetchResponse<Response> {
         return this.getOriginResponse() == null ? "" : Optional.ofNullable(this.getOriginResponse().body())
                 .map(responseBody -> {
                     try {
-                        return responseBody.string();
+                        String result = responseBody.string();
+                        responseBody.close();
+                        return result;
                     } catch (Exception e) {
                         return "";
                     }
