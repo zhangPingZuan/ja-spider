@@ -1,11 +1,14 @@
 package io.zpz.tool.spider;
 
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 
+@Getter
 public class SpiderItemResult {
 
     private Iterable<?> records = new ArrayList<>();
