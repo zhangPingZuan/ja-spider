@@ -4,6 +4,7 @@ public interface SpiderItem<T> {
 
     boolean match(String url);
 
-    Iterable<T> getResults(String content);
+    SpiderItemResult getResults(String content);
+
 
 }

@@ -5,6 +5,7 @@ import io.zpz.tool.windup.entity.DataRecord;
 import io.zpz.tool.windup.repository.DataRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,11 @@ public class MysqlFinalProcessor implements FinalProcessor {
                 dataRecords.add((DataRecord) record);
             // 如果是其他类。
         });
+        saveData(dataRecords);
+    }
+
+    @Transactional
+    public void saveData(List<DataRecord> dataRecords) {
         if (dataRecords.size() != 0) {
             dataRecordRepository.saveAll(dataRecords);
         }

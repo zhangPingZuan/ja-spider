@@ -13,14 +13,12 @@ import java.io.IOException;
 @Getter
 public class DefaultDownloader implements Downloader {
 
-    private final OkHttpClient okHttpClient = new OkHttpClient().newBuilder().build();
-
     public FetchResponse<Response> fetch(FetchRequest fetchRequest) {
         Request.Builder builder = new Request.Builder();
         fetchRequest.getHeaders().forEach(builder::addHeader);
         builder.url(fetchRequest.getUrl());
         try {
-            Response response = okHttpClient.newCall(builder.build()).execute();
+            Response response = new OkHttpClient().newBuilder().build().newCall(builder.build()).execute();
             return HttpClientResponse.builder()
                     .code(response.code())
                     .success(response.isSuccessful())

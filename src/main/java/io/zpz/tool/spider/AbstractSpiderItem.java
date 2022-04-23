@@ -2,7 +2,6 @@ package io.zpz.tool.spider;
 
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 
@@ -10,7 +9,6 @@ import java.util.regex.Pattern;
 public abstract class AbstractSpiderItem<T> implements SpiderItem<T> {
 
     protected String regex = "";
-    protected final Iterable<T> results = new ArrayList<>();
 
     @Override
     public boolean match(String url) {
@@ -18,7 +16,7 @@ public abstract class AbstractSpiderItem<T> implements SpiderItem<T> {
     }
 
     @Override
-    public Iterable<T> getResults(String content) {
-        return results;
+    public SpiderItemResult getResults(String content) {
+        throw new UnsupportedOperationException("请调用子类");
     }
 }

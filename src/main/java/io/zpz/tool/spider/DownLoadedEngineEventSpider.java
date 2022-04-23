@@ -46,8 +46,10 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
 
     private void handleService(SpiderItem<?> spiderItem, String content) {
 
-        Iterable<?> dataRecords = spiderItem.getResults(content);
-        finalProcessor.process(dataRecords);
+        SpiderItemResult spiderItemResult = spiderItem.getResults(content);
+        finalProcessor.process(spiderItemResult.getRecords());
+
+        // 吐出新请求
 
     }
 
