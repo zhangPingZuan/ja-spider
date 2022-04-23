@@ -45,7 +45,7 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
                 // 添加数据记录
                 DataRecord dataRecord = new DataRecord();
                 dataRecord.setUrl(originUrl);
-                Map<String, Object> map = new HashMap<>();
+                Map<String, String> map = new HashMap<>();
                 map.put("book", book.select("span.s2 > a").text());
                 map.put("author", book.select("span.s4").text());
                 map.put("bookUrl", url);
@@ -63,7 +63,7 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
             if (page.text().equals("下一页")) {
                 DataRecord dataRecord = new DataRecord();
                 dataRecord.setUrl(originUrl);
-                Map<String, Object> map = new HashMap<>();
+                Map<String, String> map = new HashMap<>();
                 map.put("category", category);
                 map.put("categoryUrl", "https://www.shuquge.com" + page.attr("href"));
                 dataRecord.setContent(map);

@@ -1,5 +1,7 @@
 package io.zpz.tool.spider.shuquge;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zpz.tool.spider.AbstractSpiderItem;
 import io.zpz.tool.spider.SpiderItemResult;
 import io.zpz.tool.util.StringUtils;
@@ -72,11 +74,18 @@ public class FreeReadBookSpiderItem extends AbstractSpiderItem<DataRecord> {
             chapterInfos.add(character);
         }
         DataRecord dataRecord = new DataRecord();
-        Map<String, Object> map = new HashMap<>();
-        map.put("bookInfo", bookInfo);
-        map.put("chapterInfos", chapterInfos.stream()
-                .sorted(Comparator.comparing(Character::getIndex))
-                .collect(toList()));
+        Map<String, String> map = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            map.put("bookInfo", mapper.writeValueAsString(bookInfo));
+            map.put("chapterInfos", mapper.writeValueAsString(chapterInfos.stream()
+                    .sorted(Comparator.comparing(Character::getIndex))
+                    .collect(toList())));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            map.put("bookInfo", "序列化异常");
+            map.put("chapterInfos", "序列化异常");
+        }
         dataRecord.setUrl(originUrl);
         dataRecord.setContent(map);
         dataRecord.setDescription("这是一个书籍详情数据");

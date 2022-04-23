@@ -43,7 +43,7 @@ public class FreeReadSpiderItem extends AbstractSpiderItem<DataRecord> {
                     // 添加数据记录
                     DataRecord dataRecord = new DataRecord();
                     dataRecord.setUrl(originUrl);
-                    Map<String, Object> map = new HashMap<>();
+                    Map<String, String> map = new HashMap<>();
                     map.put("category", link.text());
                     map.put("categoryUrl", url);
                     dataRecord.setContent(map);
