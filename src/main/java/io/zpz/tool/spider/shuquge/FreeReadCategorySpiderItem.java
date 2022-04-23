@@ -26,7 +26,7 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
     }
 
     @Override
-    public SpiderItemResult getResults(String content) {
+    public SpiderItemResult getResults(String content, String originUrl) {
 
         List<DataRecord> dataRecordList = new ArrayList<>();
         Set<String> urls = new HashSet<>();
@@ -44,28 +44,32 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
                 category = book.select("span.s1").first().text().substring(1, 3);
                 // 添加数据记录
                 DataRecord dataRecord = new DataRecord();
-                dataRecord.setUrl(url);
-                Map<String, String> map = new HashMap<>();
+                dataRecord.setUrl(originUrl);
+                Map<String, Object> map = new HashMap<>();
                 map.put("book", book.select("span.s2 > a").text());
                 map.put("author", book.select("span.s4").text());
+                map.put("bookUrl", url);
                 dataRecord.setContent(map);
-                dataRecord.setDescription("这是一个书籍页面");
+                dataRecord.setDescription("这是一个书籍页面（分类页面解析出来的一个数据）");
                 dataRecordList.add(dataRecord);
-                // 添加新请求
+
+                //添加新请求
                 urls.add(url);
             }
         }
-        // 下一页 body > div.wrap > div.up > div.l.bd > ul > div > a:nth-child(12)
-        Element next = document.select("body > div.wrap > div.up > div.l.bd > ul > div > a:nth-child(12)").first();
-        if (next != null) {
-            DataRecord dataRecord = new DataRecord();
-            dataRecord.setUrl("https://www.shuquge.com" + next.attr("href"));
-            Map<String, String> map = new HashMap<>();
-            map.put("category", category);
-            dataRecord.setContent(map);
-            dataRecord.setDescription("这是一个分类页面");
-            dataRecordList.add(dataRecord);
-            urls.add(dataRecord.getUrl());
+        // 下一页 body > div.wrap > div.up > div.l.bd > ul > div > a
+        Elements pages = document.select("body > div.wrap > div.up > div.l.bd > ul > div > a");
+        for (Element page : pages) {
+            if (page.text().equals("下一页")) {
+                DataRecord dataRecord = new DataRecord();
+                dataRecord.setUrl("https://www.shuquge.com" + page.attr("href"));
+                Map<String, Object> map = new HashMap<>();
+                map.put("category", category);
+                dataRecord.setContent(map);
+                dataRecord.setDescription("这是一个分类页面");
+                dataRecordList.add(dataRecord);
+                urls.add(dataRecord.getUrl());
+            }
         }
 
         return new SpiderItemResult(dataRecordList, urls);

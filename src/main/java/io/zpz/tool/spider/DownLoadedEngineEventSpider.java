@@ -32,7 +32,7 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
         this.spiderItems.stream().filter(spiderItem -> spiderItem.match(crawlingResponse.getUrl()))
                 .forEach(spiderItem -> {
                     // handle
-                    handleService(spiderItem, crawlingResponse.getOriginResponseString());
+                    handleService(spiderItem, crawlingResponse.getOriginResponseString(), crawlingResponse.getUrl());
                 });
     }
 
@@ -47,9 +47,9 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
         super.spiderItems.add(spiderItem);
     }
 
-    private void handleService(SpiderItem<?> spiderItem, String content) {
+    private void handleService(SpiderItem<?> spiderItem, String content, String originUrl) {
 
-        SpiderItemResult spiderItemResult = spiderItem.getResults(content);
+        SpiderItemResult spiderItemResult = spiderItem.getResults(content, originUrl);
         finalProcessor.process(spiderItemResult.getRecords());
 
         // 吐出新请求
@@ -69,7 +69,6 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
 
     @Override
     public void onEngineEvent(DownLoadedEngineEvent event) {
-        log.info("#### spider:{} 接收到广播事件 ####", super.getSpiderKey());
         this.parse((CrawlingResponse<?>) event.getSource());
     }
 

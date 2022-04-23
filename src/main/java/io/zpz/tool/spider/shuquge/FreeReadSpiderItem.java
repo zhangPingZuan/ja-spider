@@ -19,7 +19,7 @@ public class FreeReadSpiderItem extends AbstractSpiderItem<DataRecord> {
 
 
     @Override
-    public SpiderItemResult getResults(String content) {
+    public SpiderItemResult getResults(String content, String originUrl) {
 
         List<DataRecord> dataRecordList = new ArrayList<>();
         Set<String> urls = new HashSet<>();
@@ -36,15 +36,19 @@ public class FreeReadSpiderItem extends AbstractSpiderItem<DataRecord> {
 
             if (url.startsWith("http")) {
 
-                // 添加数据记录
-                DataRecord dataRecord = new DataRecord();
-                dataRecord.setUrl(url);
-                Map<String, String> map = new HashMap<>();
-                map.put("category", link.text());
-                dataRecord.setContent(map);
-                dataRecord.setDescription("这是一个分类页面");
-                dataRecordList.add(dataRecord);
+                if ("首页".equals(link.text())) {
 
+                } else {
+                    // 添加数据记录
+                    DataRecord dataRecord = new DataRecord();
+                    dataRecord.setUrl(originUrl);
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("category", link.text());
+                    map.put("categoryUrl", url);
+                    dataRecord.setContent(map);
+                    dataRecord.setDescription("这是一个分类页面");
+                    dataRecordList.add(dataRecord);
+                }
                 // 添加新请求
                 urls.add(url);
             }

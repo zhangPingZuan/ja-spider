@@ -86,12 +86,15 @@ public class DefaultCentralEngine implements CentralEngine {
             if (CollectionUtils.isEmpty(fetchRequestList)) {
                 // 休息一下
                 try {
-                    log.info("fetchRequestList是空的，我先睡一下1s！！！");
-                    Thread.sleep(1000);
+                    log.info("fetchRequestList是空的，我先睡一下5s！！！");
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+
+            // todo delete 避免把人家网站搞崩溃
+//            delay500ms();
 
             // 将拿到response
             List<FetchResponse<?>> fetchResponses = fetchRequestList.stream().map(this.downloader::fetch)
@@ -104,6 +107,15 @@ public class DefaultCentralEngine implements CentralEngine {
                 this.engineEventMulticaster.multicast(downLoadedEngineEvent);
             });
 
+        }
+    }
+
+    private void delay500ms() {
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
