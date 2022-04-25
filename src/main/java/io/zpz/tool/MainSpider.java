@@ -55,6 +55,9 @@ public class MainSpider {
         spider.addSpiderItem(FreeReadBookSpiderItem.builder()
                 .regex("https://www.shuquge.com/txt/\\w+/index.html")
                 .build());
+        spider.addSpiderItem(FreeReadBookSpiderItem.builder()
+                .regex("https://www.shuquge.com/txt/\\w+/\\w.html")
+                .build());
 
         taskManager.addCrawlingRequest(new CrawlingRequest() {
             @Override
