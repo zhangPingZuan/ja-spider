@@ -72,6 +72,7 @@ public class FreeReadBookSpiderItem extends AbstractSpiderItem<DataRecord> {
             character.setIndex(chapters.indexOf(element));
             chapterInfos.remove(character);
             chapterInfos.add(character);
+            urls.add(character.getUrl());
         }
         DataRecord dataRecord = new DataRecord();
         Map<String, Object> map = new HashMap<>();

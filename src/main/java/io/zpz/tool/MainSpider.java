@@ -9,8 +9,10 @@ import io.zpz.tool.spider.DownLoadedEngineEventSpider;
 import io.zpz.tool.spider.Spider;
 import io.zpz.tool.spider.shuquge.FreeReadBookSpiderItem;
 import io.zpz.tool.spider.shuquge.FreeReadCategorySpiderItem;
+import io.zpz.tool.spider.shuquge.FreeReadChapterSpiderItem;
 import io.zpz.tool.spider.shuquge.FreeReadSpiderItem;
 import io.zpz.tool.task.DefaultTaskManager;
+import io.zpz.tool.task.RedisTaskManager;
 import io.zpz.tool.task.TaskManager;
 import io.zpz.tool.windup.FinalProcessor;
 import io.zpz.tool.windup.MysqlFinalProcessor;
@@ -33,17 +35,18 @@ public class MainSpider {
 
         // 配置引擎
         TaskManager taskManager = new DefaultTaskManager();
+        TaskManager redisTaskManager = new RedisTaskManager("localhost", 6388, "zpz961216A");
         CentralEngine centralEngine = DefaultCentralEngine.builder()
                 .downloader(new DefaultDownloader())
                 .engineEventMulticaster(new SimpleEngineEventMulticaster())
-                .taskManager(taskManager)
+                .taskManager(redisTaskManager)
                 .scheduler(null)
                 .build();
 
         // 配置spider
         FinalProcessor finalProcessor = new MysqlFinalProcessor();
         Spider<?> spider = DownLoadedEngineEventSpider.builder()
-                .taskManager(taskManager)
+                .taskManager(redisTaskManager)
                 .finalProcessor(finalProcessor)
                 .build();
         spider.addSpiderItem(FreeReadSpiderItem.builder()
@@ -55,11 +58,11 @@ public class MainSpider {
         spider.addSpiderItem(FreeReadBookSpiderItem.builder()
                 .regex("https://www.shuquge.com/txt/\\w+/index.html")
                 .build());
-        spider.addSpiderItem(FreeReadBookSpiderItem.builder()
-                .regex("https://www.shuquge.com/txt/\\w+/\\w.html")
+        spider.addSpiderItem(FreeReadChapterSpiderItem.builder()
+                .regex("https://www.shuquge.com/txt/\\w+/\\d+.html")
                 .build());
 
-        taskManager.addCrawlingRequest(new CrawlingRequest() {
+        redisTaskManager.addCrawlingRequest(new CrawlingRequest() {
             @Override
             public String getUrl() {
                 return url;

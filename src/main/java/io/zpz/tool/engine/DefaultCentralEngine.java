@@ -97,7 +97,7 @@ public class DefaultCentralEngine implements CentralEngine {
 //            delay500ms();
 
             // 将拿到response
-            List<FetchResponse<?>> fetchResponses = fetchRequestList.stream().map(this.downloader::fetch)
+            List<FetchResponse<?>> fetchResponses = fetchRequestList.parallelStream().map(this.downloader::fetch)
                     .collect(Collectors.toList());
 
 
