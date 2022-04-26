@@ -32,7 +32,7 @@ public class DefaultCentralEngine implements CentralEngine {
      */
     private final AtomicReference<Thread> curThread = new AtomicReference<>();
 
-    private final Integer DEFAULT_SIZE = 50;
+    private final Integer DEFAULT_SIZE = 200;
 
 
     @Override
