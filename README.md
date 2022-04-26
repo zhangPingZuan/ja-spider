@@ -41,3 +41,11 @@ void function(泛型类<A> parm);
 ```
 
 - 爬到一半中断了该怎么办？？
+
+
+
+- ResolvableType的学习
+就是说你如果实现了ResolvableTypeProvider，那么更加精确的东西就会反给你。
+否则就使用forClass。
+
+原代码中还加了各种缓存去筛选listener。
