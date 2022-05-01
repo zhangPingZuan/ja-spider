@@ -1,9 +1,9 @@
 package io.zpz.tool.task;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zpz.tool.crawling.CrawlingRequest;
-import io.zpz.tool.crawling.DefaultCrawlingRequest;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 
@@ -67,7 +67,18 @@ public class RedisTaskManager extends AbstractTaskManager {
         String value = jedis.rpop(CRAWLING_REQUEST);
         if (value == null) return null;
         try {
-            return objectMapper.readValue(value, DefaultCrawlingRequest.class);
+            final JsonNode jsonRoot = objectMapper.readTree(value);
+            return new CrawlingRequest() {
+                @Override
+                public String getUrl() {
+                    return jsonRoot.get("url").asText();
+                }
+
+                @Override
+                public String getSpiderKey() {
+                    return jsonRoot.get("spiderKey").asText();
+                }
+            };
         } catch (JsonProcessingException e) {
             log.error("RedisTaskManager.pollCrawlingRequest deserialize error !!!");
         }
@@ -80,7 +91,18 @@ public class RedisTaskManager extends AbstractTaskManager {
         if (values == null || values.size() == 0) return new ArrayList<>();
         return values.stream().map(value -> {
             try {
-                return objectMapper.readValue(value, DefaultCrawlingRequest.class);
+                final JsonNode jsonRoot = objectMapper.readTree(value);
+                return new CrawlingRequest() {
+                    @Override
+                    public String getUrl() {
+                        return jsonRoot.get("url").asText();
+                    }
+
+                    @Override
+                    public String getSpiderKey() {
+                        return jsonRoot.get("spiderKey").asText();
+                    }
+                };
             } catch (JsonProcessingException e) {
                 log.error("RedisTaskManager.pollCrawlingRequests deserialize error !!!");
             }
