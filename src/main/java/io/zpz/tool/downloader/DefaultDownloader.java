@@ -19,7 +19,7 @@ public class DefaultDownloader implements Downloader {
     private final Set<String> handledUrls = new HashSet<>();
 
     private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient.Builder()
-            .connectionPool(new ConnectionPool(100, 5, TimeUnit.MINUTES))
+            .connectionPool(new ConnectionPool(300, 5, TimeUnit.MINUTES))
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
