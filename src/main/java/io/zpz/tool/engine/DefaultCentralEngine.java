@@ -97,8 +97,12 @@ public class DefaultCentralEngine implements CentralEngine {
                 }
             }
 
-            fetchRequestList.forEach(fetchRequest -> executorService.execute(() -> {
-                FetchResponse<?> fetchResponse = this.downloader.fetch(fetchRequest);
+
+            List<FetchResponse<?>> responses = fetchRequestList.stream()
+                    .map(this.downloader::fetch)
+                    .collect(Collectors.toList());
+
+            responses.forEach(fetchResponse -> executorService.execute(() -> {
                 DownLoadedEngineEvent downLoadedEngineEvent = new DownLoadedEngineEvent(fetchResponse);
                 this.engineEventMulticaster.multicast(downLoadedEngineEvent);
             }));
