@@ -14,6 +14,7 @@ import java.io.IOException;
 public class DefaultDownloader implements Downloader {
 
     public FetchResponse<Response> fetch(FetchRequest fetchRequest) {
+        log.info("DefaultDownloader.fetch 只是看一下线程数量");
         Request.Builder builder = new Request.Builder();
         fetchRequest.getHeaders().forEach(builder::addHeader);
         builder.url(fetchRequest.getUrl());

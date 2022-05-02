@@ -4,5 +4,5 @@ public interface SpiderItem<T> {
 
     boolean match(String url);
 
-    SpiderItemResult getResults(String content, String originUrl);
+    SpiderItemResult<T> getResults(String content, String originUrl);
 }

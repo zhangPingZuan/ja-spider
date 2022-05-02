@@ -1,6 +1,5 @@
 package io.zpz.tool.spider;
 
-
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -9,13 +8,13 @@ import java.util.Set;
 
 
 @Getter
-public class SpiderItemResult {
+public class SpiderItemResult<T> {
 
-    private Iterable<?> records = new ArrayList<>();
+    private Iterable<T> records = new ArrayList<>();
 
     private Set<String> newUrls = new HashSet<>();
 
-    public SpiderItemResult(Iterable<?> records, Set<String> newUrls) {
+    public SpiderItemResult(Iterable<T> records, Set<String> newUrls) {
         if (records == null) {
             throw new RuntimeException("records 不能为空");
         }

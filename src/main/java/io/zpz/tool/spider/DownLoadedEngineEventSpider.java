@@ -6,6 +6,7 @@ import io.zpz.tool.engine.DownLoadedEngineEvent;
 import io.zpz.tool.engine.core.ResolvableType;
 import io.zpz.tool.task.TaskManager;
 import io.zpz.tool.windup.FinalProcessor;
+import io.zpz.tool.windup.entity.DataRecord;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,10 +16,15 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Builder
-public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngineEvent> {
+public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngineEvent, DataRecord> {
 
     private final TaskManager taskManager;
-    private final FinalProcessor finalProcessor;
+    private final FinalProcessor<DataRecord> finalProcessor;
+
+    @Override
+    public void setSpiderKey(String spiderKey) {
+        super.setSpiderKey(spiderKey);
+    }
 
     @Override
     public String getSpiderKey() {
@@ -41,16 +47,24 @@ public class DownLoadedEngineEventSpider extends AbstractSpider<DownLoadedEngine
         return super.getTaskManager();
     }
 
-
     @Override
-    public void addSpiderItem(SpiderItem<?> spiderItem) {
-        super.spiderItems.add(spiderItem);
+    public FinalProcessor<DataRecord> getFinalProcessor() {
+        return super.getFinalProcessor();
     }
 
-    private void handleService(SpiderItem<?> spiderItem, String content, String originUrl) {
+    @Override
+    public void addSpiderItem(SpiderItem<DataRecord> spiderItem) {
+        super.addSpiderItem(spiderItem);
+    }
 
-        SpiderItemResult spiderItemResult = spiderItem.getResults(content, originUrl);
-        finalProcessor.process(spiderItemResult.getRecords());
+
+    private void handleService(SpiderItem<DataRecord> spiderItem, String content, String originUrl) {
+
+        /**
+         * 把请求结果丢给spider，然后spider找到对应的处理规则去解析。
+         */
+        SpiderItemResult<DataRecord> spiderItemResult = spiderItem.getResults(content, originUrl);
+        finalProcessor.addDataRecords(spiderItemResult.getRecords());
 
         // 吐出新请求
         String spiderKey = super.spiderKey;

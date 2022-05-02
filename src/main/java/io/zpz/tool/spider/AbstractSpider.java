@@ -4,20 +4,26 @@ import io.zpz.tool.crawling.CrawlingResponse;
 import io.zpz.tool.engine.EngineEvent;
 import io.zpz.tool.engine.core.ResolvableType;
 import io.zpz.tool.task.TaskManager;
+import io.zpz.tool.util.StringUtils;
 import io.zpz.tool.windup.FinalProcessor;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class AbstractSpider<E extends EngineEvent> implements Spider<E> {
+public abstract class AbstractSpider<E extends EngineEvent, R> implements Spider<E, R> {
 
-    protected final String spiderKey = UUID.randomUUID().toString();
-    protected final Set<SpiderItem<?>> spiderItems = new HashSet<>();
+    protected String spiderKey = "";
+    protected final Set<SpiderItem<R>> spiderItems = new HashSet<>();
+
+    @Override
+    public void setSpiderKey(String spiderKey) {
+        this.spiderKey = spiderKey;
+    }
 
     @Override
     public String getSpiderKey() {
-        return this.spiderKey;
+        return StringUtils.isEmpty(this.spiderKey) ? UUID.randomUUID().toString() : this.spiderKey;
     }
 
 
@@ -32,18 +38,18 @@ public abstract class AbstractSpider<E extends EngineEvent> implements Spider<E>
     }
 
     @Override
-    public FinalProcessor getFinalProcessor() {
+    public FinalProcessor<R> getFinalProcessor() {
         throw new UnsupportedOperationException("请在子类中实现");
     }
 
     @Override
-    public void addSpiderItem(SpiderItem<?> spiderItem) {
-        throw new UnsupportedOperationException("请在子类中实现");
+    public void addSpiderItem(SpiderItem<R> spiderItem) {
+        spiderItems.add(spiderItem);
     }
 
     @Override
     public void onEngineEvent(E event) {
-        throw new UnsupportedOperationException("请在子类中实现");
+
     }
 
     @Override

@@ -36,7 +36,7 @@ public class FreeReadBookSpiderItem extends AbstractSpiderItem<DataRecord> {
     }
 
     @Override
-    public SpiderItemResult getResults(String content, String originUrl) {
+    public SpiderItemResult<DataRecord> getResults(String content, String originUrl) {
 
         List<DataRecord> dataRecordList = new ArrayList<>();
         Set<String> urls = new HashSet<>();
@@ -90,7 +90,7 @@ public class FreeReadBookSpiderItem extends AbstractSpiderItem<DataRecord> {
         }
         dataRecord.setDescription("这是一个书籍详情数据");
         dataRecordList.add(dataRecord);
-        return new SpiderItemResult(dataRecordList, urls);
+        return new SpiderItemResult<>(dataRecordList, urls);
     }
 
     @Setter

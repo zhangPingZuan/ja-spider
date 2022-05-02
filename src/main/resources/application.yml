@@ -4,7 +4,11 @@ spring:
     username: 'root'
     password: 'zpz961216A'
     driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      maximum-pool-size: 200
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: false
+server:
+  port: 9888

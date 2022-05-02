@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -86,36 +88,21 @@ public class DefaultCentralEngine implements CentralEngine {
             if (CollectionUtils.isEmpty(fetchRequestList)) {
                 // 休息一下
                 try {
-                    log.info("fetchRequestList是空的，我先睡一下5s！！！");
-                    Thread.sleep(5000);
+                    log.info("fetchRequestList是空的，我先睡一下1s！！！");
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
-            // todo delete 避免把人家网站搞崩溃
-//            delay500ms();
 
             // 将拿到response
-            List<FetchResponse<?>> fetchResponses = fetchRequestList.parallelStream().map(this.downloader::fetch)
-                    .collect(Collectors.toList());
-
-
-            // 用多播器广播一下
-            fetchResponses.forEach(fetchResponse -> {
+            ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_SIZE);
+            fetchRequestList.forEach(fetchRequest -> executorService.execute(() -> {
+                FetchResponse<?> fetchResponse = this.downloader.fetch(fetchRequest);
                 DownLoadedEngineEvent downLoadedEngineEvent = new DownLoadedEngineEvent(fetchResponse);
                 this.engineEventMulticaster.multicast(downLoadedEngineEvent);
-            });
-
-        }
-    }
-
-    private void delay500ms() {
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            }));
         }
     }
 

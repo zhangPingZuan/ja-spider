@@ -21,7 +21,7 @@ public class FreeReadSpiderItem extends AbstractSpiderItem<DataRecord> {
 
 
     @Override
-    public SpiderItemResult getResults(String content, String originUrl) {
+    public SpiderItemResult<DataRecord> getResults(String content, String originUrl) {
 
         List<DataRecord> dataRecordList = new ArrayList<>();
         Set<String> urls = new HashSet<>();
@@ -65,7 +65,7 @@ public class FreeReadSpiderItem extends AbstractSpiderItem<DataRecord> {
         // 推荐书籍
         // 最近更新小说
         // 最新入库小说
-        return new SpiderItemResult(dataRecordList, urls);
+        return new SpiderItemResult<>(dataRecordList, urls);
     }
 
     @Override

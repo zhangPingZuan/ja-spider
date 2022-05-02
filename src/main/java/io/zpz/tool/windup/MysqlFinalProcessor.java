@@ -5,32 +5,51 @@ import io.zpz.tool.windup.entity.DataRecord;
 import io.zpz.tool.windup.repository.DataRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Slf4j
-public class MysqlFinalProcessor implements FinalProcessor {
+public class MysqlFinalProcessor extends AbstractFinalProcessor<DataRecord> {
 
     private final DataRecordRepository dataRecordRepository = SpringUtility.getBean(DataRecordRepository.class);
 
     @Override
-    public <T> void process(Iterable<T> records) {
-        List<DataRecord> dataRecords = new ArrayList<>();
-        records.forEach(record -> {
-            if (record instanceof DataRecord)
-                dataRecords.add((DataRecord) record);
-            // 如果是其他类。
-        });
-        saveData(dataRecords);
+    public void addDataRecords(Iterable<DataRecord> dataRecords) {
+        dataRecords.forEach(super.processorDataQueue::add);
     }
 
-    @Transactional
-    public void saveData(List<DataRecord> dataRecords) {
-        if (dataRecords.size() != 0) {
-            dataRecordRepository.saveAll(dataRecords);
+    @Override
+    public void addDataRecord(DataRecord dataRecord) {
+        super.processorDataQueue.add(dataRecord);
+    }
+
+    @Override
+    public void start() {
+        super.curThread.set(new Thread(() -> {
+            while (!curThread.get().isInterrupted()) {
+                handleService();
+            }
+        }));
+        super.curThread.get().start();
+    }
+
+    private void handleService() {
+        if (super.processorDataQueue.isEmpty()) {
+            // 休息一下
+            try {
+                log.info("processorDataQueue是空的，我先睡一下1s！！！");
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            dataRecordRepository.saveAll(super.processorDataQueue.stream().parallel().collect(Collectors.toList()));
         }
+
     }
 
-
+    @Override
+    public void stop() {
+        super.curThread.get().interrupt();
+    }
 }

@@ -28,7 +28,7 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
     }
 
     @Override
-    public SpiderItemResult getResults(String content, String originUrl) {
+    public SpiderItemResult<DataRecord> getResults(String content, String originUrl) {
 
         List<DataRecord> dataRecordList = new ArrayList<>();
         Set<String> urls = new HashSet<>();
@@ -84,6 +84,6 @@ public class FreeReadCategorySpiderItem extends AbstractSpiderItem<DataRecord> {
             }
         }
 
-        return new SpiderItemResult(dataRecordList, urls);
+        return new SpiderItemResult<>(dataRecordList, urls);
     }
 }

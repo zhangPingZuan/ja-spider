@@ -4,6 +4,7 @@ import io.zpz.tool.crawling.CrawlingRequest;
 import io.zpz.tool.downloader.DefaultDownloader;
 import io.zpz.tool.engine.CentralEngine;
 import io.zpz.tool.engine.DefaultCentralEngine;
+import io.zpz.tool.engine.DownLoadedEngineEvent;
 import io.zpz.tool.engine.SimpleEngineEventMulticaster;
 import io.zpz.tool.spider.DownLoadedEngineEventSpider;
 import io.zpz.tool.spider.Spider;
@@ -16,6 +17,7 @@ import io.zpz.tool.task.RedisTaskManager;
 import io.zpz.tool.task.TaskManager;
 import io.zpz.tool.windup.FinalProcessor;
 import io.zpz.tool.windup.MysqlFinalProcessor;
+import io.zpz.tool.windup.entity.DataRecord;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +46,9 @@ public class MainSpider {
                 .build();
 
         // 配置spider
-        FinalProcessor finalProcessor = new MysqlFinalProcessor();
-        Spider<?> spider = DownLoadedEngineEventSpider.builder()
+        FinalProcessor<DataRecord> finalProcessor = new MysqlFinalProcessor();
+        finalProcessor.start();
+        Spider<DownLoadedEngineEvent, DataRecord> spider = DownLoadedEngineEventSpider.builder()
                 .taskManager(redisTaskManager)
                 .finalProcessor(finalProcessor)
                 .build();
@@ -84,7 +87,7 @@ public class MainSpider {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        finalProcessor.stop();
         // 关闭引擎
         centralEngine.stop();
     }
