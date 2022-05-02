@@ -19,7 +19,7 @@ public class DefaultDownloader implements Downloader {
     private final Set<String> handledUrls = new HashSet<>();
 
     private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient.Builder()
-            .connectionPool(new ConnectionPool(50, 5, TimeUnit.MINUTES))
+            .connectionPool(new ConnectionPool(100, 5, TimeUnit.MINUTES))
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -31,8 +31,9 @@ public class DefaultDownloader implements Downloader {
         fetchRequest.getHeaders().forEach(builder::addHeader);
         builder.url(fetchRequest.getUrl());
         try {
+            long start = System.currentTimeMillis();
             Response response = OK_HTTP_CLIENT.newBuilder().build().newCall(builder.build()).execute();
-            log.info("#### " + fetchRequest.getUrl() + " ####");
+            log.info("#### " + fetchRequest.getUrl() + " #### 共计用时:{}", System.currentTimeMillis() - start);
             return HttpClientResponse.builder()
                     .code(response.code())
                     .success(response.isSuccessful())
