@@ -2,27 +2,37 @@ package io.zpz.tool.downloader;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.httpclient.HttpStatus;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Getter
 public class DefaultDownloader implements Downloader {
+    private final Set<String> handledUrls = new HashSet<>();
+
+    private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient.Builder()
+            .connectionPool(new ConnectionPool(50, 5, TimeUnit.MINUTES))
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build();
+
 
     public FetchResponse<Response> fetch(FetchRequest fetchRequest) {
         Request.Builder builder = new Request.Builder();
         fetchRequest.getHeaders().forEach(builder::addHeader);
         builder.url(fetchRequest.getUrl());
         try {
-            Response response = new OkHttpClient().newBuilder()
-                    .connectTimeout(Duration.of(10, ChronoUnit.SECONDS))
-                    .build().newCall(builder.build()).execute();
+            Response response = OK_HTTP_CLIENT.newBuilder().build().newCall(builder.build()).execute();
+            log.info("#### " + fetchRequest.getUrl() + " ####");
             return HttpClientResponse.builder()
                     .code(response.code())
                     .success(response.isSuccessful())

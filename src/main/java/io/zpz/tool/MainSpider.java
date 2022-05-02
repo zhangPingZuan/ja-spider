@@ -52,6 +52,7 @@ public class MainSpider {
                 .taskManager(redisTaskManager)
                 .finalProcessor(finalProcessor)
                 .build();
+        spider.setSpiderKey("spider-1");
         spider.addSpiderItem(FreeReadSpiderItem.builder()
                 .regex(url)
                 .build());
