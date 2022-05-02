@@ -36,6 +36,7 @@ public class FreeReadChapterSpiderItem extends AbstractSpiderItem<DataRecord> {
         dataRecord.setDescription("这是一个章节页面");
         Map<String, Object> map = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
+        map.put("bookName", document.select("#wrapper > div.book.reader > div.path > div > a:nth-child(2)").first().text());
         map.put("chapterName", document.select("#wrapper > div.book.reader > div.content > h1").first().text());
         map.put("chapterContent", document.select("#content").first().text());
         try {

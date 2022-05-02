@@ -61,7 +61,7 @@ public class DefaultCentralEngine implements CentralEngine {
 
     @Override
     public void start() {
-
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", DEFAULT_SIZE.toString());
         // 开启一个线程去处理请求
         curThread.set(new Thread(() -> {
             while (!curThread.get().isInterrupted()) {
@@ -97,8 +97,7 @@ public class DefaultCentralEngine implements CentralEngine {
                 }
             }
 
-
-            List<FetchResponse<?>> responses = fetchRequestList.stream()
+            List<FetchResponse<?>> responses = fetchRequestList.parallelStream()
                     .map(this.downloader::fetch)
                     .collect(Collectors.toList());
 
