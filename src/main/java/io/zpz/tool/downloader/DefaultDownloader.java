@@ -8,18 +8,21 @@ import okhttp3.Response;
 import org.apache.commons.httpclient.HttpStatus;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @Getter
 public class DefaultDownloader implements Downloader {
 
     public FetchResponse<Response> fetch(FetchRequest fetchRequest) {
-        log.info("DefaultDownloader.fetch 只是看一下线程数量");
         Request.Builder builder = new Request.Builder();
         fetchRequest.getHeaders().forEach(builder::addHeader);
         builder.url(fetchRequest.getUrl());
         try {
-            Response response = new OkHttpClient().newBuilder().build().newCall(builder.build()).execute();
+            Response response = new OkHttpClient().newBuilder()
+                    .connectTimeout(Duration.of(10, ChronoUnit.SECONDS))
+                    .build().newCall(builder.build()).execute();
             return HttpClientResponse.builder()
                     .code(response.code())
                     .success(response.isSuccessful())

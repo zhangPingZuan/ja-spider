@@ -36,6 +36,8 @@ public class DefaultCentralEngine implements CentralEngine {
 
     private final Integer DEFAULT_SIZE = 200;
 
+    private final ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_SIZE);
+
 
     @Override
     public TaskManager getTaskManager() {
@@ -95,9 +97,6 @@ public class DefaultCentralEngine implements CentralEngine {
                 }
             }
 
-
-            // 将拿到response
-            ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_SIZE);
             fetchRequestList.forEach(fetchRequest -> executorService.execute(() -> {
                 FetchResponse<?> fetchResponse = this.downloader.fetch(fetchRequest);
                 DownLoadedEngineEvent downLoadedEngineEvent = new DownLoadedEngineEvent(fetchResponse);
