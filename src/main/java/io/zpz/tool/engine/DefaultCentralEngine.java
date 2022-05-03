@@ -34,7 +34,7 @@ public class DefaultCentralEngine implements CentralEngine {
      */
     private final AtomicReference<Thread> curThread = new AtomicReference<>();
 
-    private final Integer DEFAULT_SIZE = 200;
+    private final Integer DEFAULT_SIZE = 100;
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_SIZE);
 
